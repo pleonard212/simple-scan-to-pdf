@@ -190,7 +190,6 @@ def main():
         normalized_path = os.path.normpath(filename)
         matched_files = glob.glob(normalized_path)
         processed_filenames.extend(matched_files)
-        print(f"Found {len(matched_files)} for '{filename}'")
     args.filenames = processed_filenames
     ### End Windows fix
 
