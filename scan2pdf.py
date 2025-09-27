@@ -7,6 +7,7 @@ import os
 import json
 from pprint import pprint
 from enum import Enum
+import glob
 
 # External System
 from wand.image import Image
@@ -180,6 +181,28 @@ def main():
     if args.help_detailed:
         help_detailed()
         sys.exit(0)
+
+    ### Handle Windows issues
+    processed_filenames = []
+    
+    for filename in args.filenames:
+        # Normalize path separators
+        normalized_path = os.path.normpath(filename)
+        matched_files = glob.glob(normalized_path)
+        processed_filenames.extend(matched_files)
+        print(f"Found {len(matched_files)} for '{filename}'")
+    args.filenames = processed_filenames
+    ### End Windows fix
+
+    # Debug information
+    print(f"Processing {len(args.filenames)} files")
+    for i, filename in enumerate(args.filenames):
+        print(f"  {i}: {filename}")
+
+    if len(args.filenames) == 0:
+        print("Please provide files to process as the final arguments on the command line")
+        sys.exit(1)
+
 
     # Find layout preset if provided
     if args.layout_preset is not None and args.layout_preset.upper() in PageLayouts.__members__:
